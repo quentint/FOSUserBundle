@@ -37,18 +37,12 @@ abstract class TypeTestCase extends BaseTypeTestCase
         $this->builder = new FormBuilder(null, null, $this->dispatcher, $this->factory);
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypeExtensions()
+    protected function getTypeExtensions(): array
     {
         return [];
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return [];
     }

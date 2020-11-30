@@ -16,37 +16,37 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testUsername()
+    public function testUsername(): void
     {
         $user = $this->getUser();
-        $this->assertNull($user->getUsername());
+        self::assertNull($user->getUsername());
 
         $user->setUsername('tony');
-        $this->assertSame('tony', $user->getUsername());
+        self::assertSame('tony', $user->getUsername());
     }
 
-    public function testEmail()
+    public function testEmail(): void
     {
         $user = $this->getUser();
-        $this->assertNull($user->getEmail());
+        self::assertNull($user->getEmail());
 
         $user->setEmail('tony@mail.org');
-        $this->assertSame('tony@mail.org', $user->getEmail());
+        self::assertSame('tony@mail.org', $user->getEmail());
     }
 
-    public function testIsPasswordRequestNonExpired()
+    public function testIsPasswordRequestNonExpired(): void
     {
         $user = $this->getUser();
         $passwordRequestedAt = new \DateTime('-10 seconds');
 
         $user->setPasswordRequestedAt($passwordRequestedAt);
 
-        $this->assertSame($passwordRequestedAt, $user->getPasswordRequestedAt());
-        $this->assertTrue($user->isPasswordRequestNonExpired(15));
-        $this->assertFalse($user->isPasswordRequestNonExpired(5));
+        self::assertSame($passwordRequestedAt, $user->getPasswordRequestedAt());
+        self::assertTrue($user->isPasswordRequestNonExpired(15));
+        self::assertFalse($user->isPasswordRequestNonExpired(5));
     }
 
-    public function testIsPasswordRequestAtCleared()
+    public function testIsPasswordRequestAtCleared(): void
     {
         $user = $this->getUser();
         $passwordRequestedAt = new \DateTime('-10 seconds');
@@ -54,55 +54,52 @@ class UserTest extends TestCase
         $user->setPasswordRequestedAt($passwordRequestedAt);
         $user->setPasswordRequestedAt(null);
 
-        $this->assertFalse($user->isPasswordRequestNonExpired(15));
-        $this->assertFalse($user->isPasswordRequestNonExpired(5));
+        self::assertFalse($user->isPasswordRequestNonExpired(15));
+        self::assertFalse($user->isPasswordRequestNonExpired(5));
     }
 
-    public function testTrueHasRole()
+    public function testTrueHasRole(): void
     {
         $user = $this->getUser();
         $defaultrole = User::ROLE_DEFAULT;
         $newrole = 'ROLE_X';
-        $this->assertTrue($user->hasRole($defaultrole));
+        self::assertTrue($user->hasRole($defaultrole));
         $user->addRole($defaultrole);
-        $this->assertTrue($user->hasRole($defaultrole));
+        self::assertTrue($user->hasRole($defaultrole));
         $user->addRole($newrole);
-        $this->assertTrue($user->hasRole($newrole));
+        self::assertTrue($user->hasRole($newrole));
     }
 
-    public function testFalseHasRole()
+    public function testFalseHasRole(): void
     {
         $user = $this->getUser();
         $newrole = 'ROLE_X';
-        $this->assertFalse($user->hasRole($newrole));
+        self::assertFalse($user->hasRole($newrole));
         $user->addRole($newrole);
-        $this->assertTrue($user->hasRole($newrole));
+        self::assertTrue($user->hasRole($newrole));
     }
 
-    public function testIsEqualTo()
+    public function testIsEqualTo(): void
     {
         $user = $this->getUser();
-        $this->assertTrue($user->isEqualTo($user));
-        $this->assertFalse($user->isEqualTo($this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock()));
+        self::assertTrue($user->isEqualTo($user));
+        self::assertFalse($user->isEqualTo($this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock()));
 
         $user2 = $this->getUser();
         $user2->setPassword('secret');
-        $this->assertFalse($user->isEqualTo($user2));
+        self::assertFalse($user->isEqualTo($user2));
 
         $user3 = $this->getUser();
         $user3->setSalt('pepper');
-        $this->assertFalse($user->isEqualTo($user3));
+        self::assertFalse($user->isEqualTo($user3));
 
         $user4 = $this->getUser();
         $user4->setUsername('f00b4r');
-        $this->assertFalse($user->isEqualTo($user4));
+        self::assertFalse($user->isEqualTo($user4));
     }
 
-    /**
-     * @return User
-     */
-    protected function getUser()
+    protected function getUser(): User
     {
-        return $this->getMockForAbstractClass('FOS\UserBundle\Model\User');
+        return $this->getMockForAbstractClass(User::class);
     }
 }

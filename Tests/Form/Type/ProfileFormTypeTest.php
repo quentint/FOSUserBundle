@@ -16,7 +16,7 @@ use FOS\UserBundle\Tests\TestUser;
 
 class ProfileFormTypeTest extends ValidatorExtensionTypeTestCase
 {
-    public function testSubmit()
+    public function testSubmit(): void
     {
         $user = new TestUser();
 
@@ -27,19 +27,16 @@ class ProfileFormTypeTest extends ValidatorExtensionTypeTestCase
         ];
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized());
-        $this->assertSame($user, $form->getData());
-        $this->assertSame('bar', $user->getUsername());
-        $this->assertSame('john@doe.com', $user->getEmail());
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($user, $form->getData());
+        self::assertSame('bar', $user->getUsername());
+        self::assertSame('john@doe.com', $user->getEmail());
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return array_merge(parent::getTypes(), [
-            new ProfileFormType('FOS\UserBundle\Tests\TestUser'),
+            new ProfileFormType(TestUser::class),
         ]);
     }
 }

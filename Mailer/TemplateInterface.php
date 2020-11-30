@@ -9,13 +9,10 @@
  * file that was distributed with this source code.
  */
 
-
 namespace FOS\UserBundle\Mailer;
 
 /**
- * Interface TemplateInterface
- *
- * @package FOS\UserBundle\Mailer
+ * Interface TemplateInterface.
  */
 interface TemplateInterface
 {
@@ -23,9 +20,6 @@ interface TemplateInterface
      * Renders a template.
      *
      * @param string $name The template name
-     * @param array  $context
-     *
-     * @return string
      */
     public function render($name, array $context = []): string;
 }

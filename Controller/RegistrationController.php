@@ -44,11 +44,6 @@ class RegistrationController extends AbstractController
 
     /**
      * RegistrationController constructor.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param FactoryInterface         $formFactory
-     * @param UserManagerInterface     $userManager
-     * @param TokenStorageInterface    $tokenStorage
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, FactoryInterface $formFactory, UserManagerInterface $userManager, TokenStorageInterface $tokenStorage)
     {
@@ -59,8 +54,6 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function registerAction(Request $request)
@@ -69,7 +62,7 @@ class RegistrationController extends AbstractController
         $user->setEnabled(true);
 
         $event = new GetResponseUserEvent($user, $request);
-        $this->eventDispatcher->dispatch($event,FOSUserEvents::REGISTRATION_INITIALIZE);
+        $this->eventDispatcher->dispatch($event, FOSUserEvents::REGISTRATION_INITIALIZE);
 
         if (null !== $event->getResponse()) {
             return $event->getResponse();
@@ -83,7 +76,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
-                $this->eventDispatcher->dispatch($event,FOSUserEvents::REGISTRATION_SUCCESS);
+                $this->eventDispatcher->dispatch($event, FOSUserEvents::REGISTRATION_SUCCESS);
 
                 $this->userManager->updateUser($user);
 
@@ -98,7 +91,7 @@ class RegistrationController extends AbstractController
             }
 
             $event = new FormEvent($form, $request);
-            $this->eventDispatcher->dispatch($event,FOSUserEvents::REGISTRATION_FAILURE);
+            $this->eventDispatcher->dispatch($event, FOSUserEvents::REGISTRATION_FAILURE);
 
             if (null !== $response = $event->getResponse()) {
                 return $response;
@@ -112,8 +105,6 @@ class RegistrationController extends AbstractController
 
     /**
      * Tell the user to check their email provider.
-     *
-     * @param Request $request
      *
      * @return RedirectResponse|Response
      */
@@ -140,8 +131,7 @@ class RegistrationController extends AbstractController
     /**
      * Receive the confirmation token from user email provider, login the user.
      *
-     * @param Request $request
-     * @param string  $token
+     * @param string $token
      *
      * @return Response
      */
@@ -159,7 +149,7 @@ class RegistrationController extends AbstractController
         $user->setEnabled(true);
 
         $event = new GetResponseUserEvent($user, $request);
-        $this->eventDispatcher->dispatch($event,FOSUserEvents::REGISTRATION_CONFIRM);
+        $this->eventDispatcher->dispatch($event, FOSUserEvents::REGISTRATION_CONFIRM);
 
         $userManager->updateUser($user);
 
@@ -168,15 +158,13 @@ class RegistrationController extends AbstractController
             $response = new RedirectResponse($url);
         }
 
-        $this->eventDispatcher->dispatch( new FilterUserResponseEvent($user, $request, $response),FOSUserEvents::REGISTRATION_CONFIRMED);
+        $this->eventDispatcher->dispatch(new FilterUserResponseEvent($user, $request, $response), FOSUserEvents::REGISTRATION_CONFIRMED);
 
         return $response;
     }
 
     /**
      * Tell the user his account is now confirmed.
-     *
-     * @param Request $request
      *
      * @return Response
      */
@@ -194,8 +182,6 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @param SessionInterface $session
-     *
      * @return string|null
      */
     private function getTargetUrlFromSession(SessionInterface $session)

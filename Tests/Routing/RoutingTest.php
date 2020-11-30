@@ -20,11 +20,8 @@ class RoutingTest extends TestCase
 {
     /**
      * @dataProvider loadRoutingProvider
-     *
-     * @param string $routeName
-     * @param string $path
      */
-    public function testLoadRouting($routeName, $path, array $methods)
+    public function testLoadRouting(string $routeName, string $path, array $methods): void
     {
         $locator = new FileLocator();
         $loader = new XmlFileLoader($locator);
@@ -46,15 +43,12 @@ class RoutingTest extends TestCase
         $collection->addCollection($loader->load(__DIR__.'/../../Resources/config/routing/security.xml'));
 
         $route = $collection->get($routeName);
-        $this->assertNotNull($route, sprintf('The route "%s" should exists', $routeName));
-        $this->assertSame($path, $route->getPath());
-        $this->assertSame($methods, $route->getMethods());
+        self::assertNotNull($route, sprintf('The route "%s" should exists', $routeName));
+        self::assertSame($path, $route->getPath());
+        self::assertSame($methods, $route->getMethods());
     }
 
-    /**
-     * @return array
-     */
-    public function loadRoutingProvider()
+    public function loadRoutingProvider(): array
     {
         return [
             ['fos_user_change_password', '/change-password', ['GET', 'POST']],

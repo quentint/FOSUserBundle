@@ -33,8 +33,6 @@ class SecurityController extends AbstractController
 
     /**
      * SecurityController constructor.
-     *
-     * @param CsrfTokenManagerInterface|null $tokenManager
      */
     public function __construct(CsrfTokenManagerInterface $tokenManager = null)
     {
@@ -42,8 +40,6 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function loginAction(Request $request)
@@ -95,8 +91,6 @@ class SecurityController extends AbstractController
     /**
      * Renders the login template with the given parameters. Overwrite this function in
      * an extended controller to provide additional data for the login template.
-     *
-     * @param array $data
      *
      * @return Response
      */

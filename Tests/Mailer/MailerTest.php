@@ -12,6 +12,8 @@
 namespace FOS\UserBundle\Tests\Mailer;
 
 use FOS\UserBundle\Mailer\Mailer;
+use FOS\UserBundle\Mailer\TemplateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Mailer;
 use Swift_Transport_NullTransport;
@@ -21,20 +23,20 @@ class MailerTest extends TestCase
     /**
      * @dataProvider goodEmailProvider
      */
-    public function testSendConfirmationEmailMessageWithGoodEmails($emailAddress)
+    public function testSendConfirmationEmailMessageWithGoodEmails($emailAddress): void
     {
         $mailer = $this->getMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
 
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException \Swift_RfcComplianceException
      */
-    public function testSendConfirmationEmailMessageWithBadEmails($emailAddress)
+    public function testSendConfirmationEmailMessageWithBadEmails($emailAddress): void
     {
+        $this->expectException(\Swift_RfcComplianceException::class);
         $mailer = $this->getMailer();
         $mailer->sendConfirmationEmailMessage($this->getUser($emailAddress));
     }
@@ -42,25 +44,25 @@ class MailerTest extends TestCase
     /**
      * @dataProvider goodEmailProvider
      */
-    public function testSendResettingEmailMessageWithGoodEmails($emailAddress)
+    public function testSendResettingEmailMessageWithGoodEmails($emailAddress): void
     {
         $mailer = $this->getMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
 
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     /**
      * @dataProvider badEmailProvider
-     * @expectedException \Swift_RfcComplianceException
      */
-    public function testSendResettingEmailMessageWithBadEmails($emailAddress)
+    public function testSendResettingEmailMessageWithBadEmails($emailAddress): void
     {
+        $this->expectException(\Swift_RfcComplianceException::class);
         $mailer = $this->getMailer();
         $mailer->sendResettingEmailMessage($this->getUser($emailAddress));
     }
 
-    public function goodEmailProvider()
+    public function goodEmailProvider(): array
     {
         return [
             ['foo@example.com'],
@@ -70,7 +72,7 @@ class MailerTest extends TestCase
         ];
     }
 
-    public function badEmailProvider()
+    public function badEmailProvider(): array
     {
         return [
             ['foo'],
@@ -78,7 +80,7 @@ class MailerTest extends TestCase
         ];
     }
 
-    private function getMailer()
+    private function getMailer(): Mailer
     {
         return new Mailer(
             new Swift_Mailer(
@@ -99,9 +101,9 @@ class MailerTest extends TestCase
         );
     }
 
-    private function getTemplating()
+    private function getTemplating(): MockObject
     {
-        $templating = $this->getMockBuilder('FOS\UserBundle\Mailer\TemplateInterface')
+        $templating = $this->getMockBuilder(TemplateInterface::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -109,7 +111,7 @@ class MailerTest extends TestCase
         return $templating;
     }
 
-    private function getUser($emailAddress)
+    private function getUser($emailAddress): MockObject
     {
         $user = $this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock();
         $user->method('getEmail')
@@ -119,7 +121,7 @@ class MailerTest extends TestCase
         return $user;
     }
 
-    private function getEmailAddressValueObject($emailAddressAsString)
+    private function getEmailAddressValueObject($emailAddressAsString): MockObject
     {
         $emailAddress = $this->getMockBuilder('EmailAddress')
            ->setMethods(['__toString'])

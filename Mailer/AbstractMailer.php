@@ -14,9 +14,8 @@ namespace FOS\UserBundle\Mailer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Class AbstractMailer
+ * Class AbstractMailer.
  *
- * @package FOS\UserBundle\Mailer
  * @author Nikolay Nikolaev <evrinoma@gmail.com>
  */
 abstract class AbstractMailer implements MailerInterface
@@ -49,8 +48,8 @@ abstract class AbstractMailer implements MailerInterface
     /**
      * @param array|string $fromEmail
      * @param array|string $toEmail
-     * @param string $template
-     * @param array  $context
+     * @param string       $template
+     * @param array        $context
      */
     abstract protected function sendMessage($fromEmail, $toEmail, $template, $context = []);
 }

@@ -40,10 +40,6 @@ class ProfileController extends AbstractController
 
     /**
      * ProfileController constructor.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param FactoryInterface         $formFactory
-     * @param UserManagerInterface     $userManager
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, FactoryInterface $formFactory, UserManagerInterface $userManager)
     {
@@ -69,8 +65,6 @@ class ProfileController extends AbstractController
 
     /**
      * Edit the user.
-     *
-     * @param Request $request
      *
      * @return Response
      */
@@ -104,7 +98,7 @@ class ProfileController extends AbstractController
                 $response = new RedirectResponse($url);
             }
 
-            $this->eventDispatcher->dispatch(new FilterUserResponseEvent($user, $request, $response),FOSUserEvents::PROFILE_EDIT_COMPLETED);
+            $this->eventDispatcher->dispatch(new FilterUserResponseEvent($user, $request, $response), FOSUserEvents::PROFILE_EDIT_COMPLETED);
 
             return $response;
         }

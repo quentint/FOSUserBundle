@@ -31,7 +31,7 @@ class Mailer extends AbstractMailer
     {
         $this->template = $template;
 
-        parent::__construct($mailer,$router,$parameters);
+        parent::__construct($mailer, $router, $parameters);
     }
 
     /**
@@ -45,7 +45,7 @@ class Mailer extends AbstractMailer
             'user' => $user,
             'confirmationUrl' => $url,
         ]);
-        $this->sendMessage($this->parameters['from_email']['confirmation'], (string) $user->getEmail(),$rendered);
+        $this->sendMessage($this->parameters['from_email']['confirmation'], (string) $user->getEmail(), $rendered);
     }
 
     /**
@@ -59,12 +59,11 @@ class Mailer extends AbstractMailer
             'user' => $user,
             'confirmationUrl' => $url,
         ]);
-        $this->sendMessage($this->parameters['from_email']['resetting'], (string) $user->getEmail(),$rendered);
+        $this->sendMessage($this->parameters['from_email']['resetting'], (string) $user->getEmail(), $rendered);
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function sendMessage($fromEmail, $toEmail, $template, $context = [])
     {

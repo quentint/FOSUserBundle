@@ -16,7 +16,7 @@ use FOS\UserBundle\Tests\TestUser;
 
 class ChangePasswordFormTypeTest extends ValidatorExtensionTypeTestCase
 {
-    public function testSubmit()
+    public function testSubmit(): void
     {
         $user = new TestUser();
         $user->setPassword('foo');
@@ -31,18 +31,15 @@ class ChangePasswordFormTypeTest extends ValidatorExtensionTypeTestCase
         ];
         $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized());
-        $this->assertSame($user, $form->getData());
-        $this->assertSame('bar', $user->getPlainPassword());
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($user, $form->getData());
+        self::assertSame('bar', $user->getPlainPassword());
     }
 
-    /**
-     * @return array
-     */
-    protected function getTypes()
+    protected function getTypes(): array
     {
         return array_merge(parent::getTypes(), [
-            new ChangePasswordFormType('FOS\UserBundle\Tests\TestUser'),
+            new ChangePasswordFormType(TestUser::class),
         ]);
     }
 }

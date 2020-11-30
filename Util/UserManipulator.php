@@ -76,7 +76,7 @@ class UserManipulator
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch($event,FOSUserEvents::USER_CREATED);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_CREATED);
 
         return $user;
     }
@@ -93,7 +93,7 @@ class UserManipulator
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch($event,FOSUserEvents::USER_ACTIVATED);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_ACTIVATED);
     }
 
     /**
@@ -108,7 +108,7 @@ class UserManipulator
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch($event,FOSUserEvents::USER_DEACTIVATED);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_DEACTIVATED);
     }
 
     /**
@@ -124,7 +124,7 @@ class UserManipulator
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch($event,FOSUserEvents::USER_PASSWORD_CHANGED);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_PASSWORD_CHANGED);
     }
 
     /**
@@ -139,7 +139,7 @@ class UserManipulator
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch($event,FOSUserEvents::USER_PROMOTED);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_PROMOTED);
     }
 
     /**
@@ -154,7 +154,7 @@ class UserManipulator
         $this->userManager->updateUser($user);
 
         $event = new UserEvent($user, $this->getRequest());
-        $this->dispatcher->dispatch($event,FOSUserEvents::USER_DEMOTED);
+        $this->dispatcher->dispatch($event, FOSUserEvents::USER_DEMOTED);
     }
 
     /**
@@ -218,7 +218,7 @@ class UserManipulator
     }
 
     /**
-     * @return  null|Request
+     * @return Request|null
      */
     private function getRequest()
     {

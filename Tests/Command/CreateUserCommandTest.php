@@ -15,11 +15,12 @@ use FOS\UserBundle\Command\CreateUserCommand;
 use FOS\UserBundle\Util\UserManipulator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CreateUserCommandTest extends TestCase
 {
-    public function testExecute()
+    public function testExecute(): void
     {
         $commandTester = $this->createCommandTester($this->getManipulator('user', 'pass', 'email', true, false));
         $exitCode = $commandTester->execute([
@@ -31,29 +32,29 @@ class CreateUserCommandTest extends TestCase
             'interactive' => false,
         ]);
 
-        $this->assertSame(0, $exitCode, 'Returns 0 in case of success');
-        $this->assertRegExp('/Created user user/', $commandTester->getDisplay());
+        self::assertSame(0, $exitCode, 'Returns 0 in case of success');
+        self::assertMatchesRegularExpression('/Created user user/', $commandTester->getDisplay());
     }
 
-    public function testExecuteInteractiveWithQuestionHelper()
+    public function testExecuteInteractiveWithQuestionHelper(): void
     {
         $application = new Application();
 
-        $helper = $this->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
+        $helper = $this->getMockBuilder(QuestionHelper::class)
             ->setMethods(['ask'])
             ->getMock();
 
-        $helper->expects($this->at(0))
+        $helper->expects(self::at(0))
             ->method('ask')
-            ->will($this->returnValue('user'));
+            ->willReturn('user');
 
-        $helper->expects($this->at(1))
+        $helper->expects(self::at(1))
             ->method('ask')
-            ->will($this->returnValue('email'));
+            ->willReturn('email');
 
-        $helper->expects($this->at(2))
+        $helper->expects(self::at(2))
             ->method('ask')
-            ->will($this->returnValue('pass'));
+            ->willReturn('pass');
 
         $application->getHelperSet()->set($helper, 'question');
 
@@ -65,14 +66,11 @@ class CreateUserCommandTest extends TestCase
             'interactive' => true,
         ]);
 
-        $this->assertSame(0, $exitCode, 'Returns 0 in case of success');
-        $this->assertRegExp('/Created user user/', $commandTester->getDisplay());
+        self::assertSame(0, $exitCode, 'Returns 0 in case of success');
+        self::assertMatchesRegularExpression('/Created user user/', $commandTester->getDisplay());
     }
 
-    /**
-     * @return CommandTester
-     */
-    private function createCommandTester(UserManipulator $manipulator, Application $application = null)
+    private function createCommandTester(UserManipulator $manipulator, Application $application = null): CommandTester
     {
         if (null === $application) {
             $application = new Application();
@@ -98,12 +96,12 @@ class CreateUserCommandTest extends TestCase
      */
     private function getManipulator($username, $password, $email, $active, $superadmin)
     {
-        $manipulator = $this->getMockBuilder('FOS\UserBundle\Util\UserManipulator')
+        $manipulator = $this->getMockBuilder(UserManipulator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $manipulator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('create')
             ->with($username, $password, $email, $active, $superadmin)
         ;

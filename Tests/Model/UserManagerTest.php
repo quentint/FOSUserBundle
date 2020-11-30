@@ -9,26 +9,37 @@
  * file that was distributed with this source code.
  */
 
+/** @noinspection StaticInvocationViaThisInspection */
+/** @noinspection StaticInvocationViaThisInspection */
+
+/*
+ * This file is part of the FOSUserBundle package.
+ *
+ * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FOS\UserBundle\Tests\Model;
 
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManager;
+use FOS\UserBundle\Util\CanonicalFieldsUpdater;
+use FOS\UserBundle\Util\PasswordUpdaterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UserManagerTest extends TestCase
 {
-    /** @var UserManager|\PHPUnit_Framework_MockObject_MockObject */
-    private $manager;
+    private MockObject $manager;
+    private MockObject $passwordUpdater;
+    private MockObject $fieldsUpdater;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    private $passwordUpdater;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    private $fieldsUpdater;
-
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->passwordUpdater = $this->getMockBuilder('FOS\UserBundle\Util\PasswordUpdaterInterface')->getMock();
-        $this->fieldsUpdater = $this->getMockBuilder('FOS\UserBundle\Util\CanonicalFieldsUpdater')
+        $this->passwordUpdater = $this->getMockBuilder(PasswordUpdaterInterface::class)->getMock();
+        $this->fieldsUpdater = $this->getMockBuilder(CanonicalFieldsUpdater::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -38,133 +49,133 @@ class UserManagerTest extends TestCase
         ]);
     }
 
-    public function testUpdateCanonicalFields()
+    public function testUpdateCanonicalFields(): void
     {
         $user = $this->getUser();
 
-        $this->fieldsUpdater->expects($this->once())
+        $this->fieldsUpdater->expects(self::once())
             ->method('updateCanonicalFields')
-            ->with($this->identicalTo($user));
+            ->with(self::identicalTo($user));
 
         $this->manager->updateCanonicalFields($user);
     }
 
-    public function testUpdatePassword()
+    public function testUpdatePassword(): void
     {
         $user = $this->getUser();
 
-        $this->passwordUpdater->expects($this->once())
+        $this->passwordUpdater->expects(self::once())
             ->method('hashPassword')
-            ->with($this->identicalTo($user));
+            ->with(self::identicalTo($user));
 
         $this->manager->updatePassword($user);
     }
 
-    public function testFindUserByUsername()
+    public function testFindUserByUsername(): void
     {
-        $this->manager->expects($this->once())
+        $this->manager->expects(self::once())
             ->method('findUserBy')
-            ->with($this->equalTo(['usernameCanonical' => 'jack']));
-        $this->fieldsUpdater->expects($this->once())
+            ->with(self::equalTo(['usernameCanonical' => 'jack']));
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeUsername')
             ->with('jack')
-            ->will($this->returnValue('jack'));
+            ->willReturn('jack');
 
         $this->manager->findUserByUsername('jack');
     }
 
-    public function testFindUserByUsernameLowercasesTheUsername()
+    public function testFindUserByUsernameLowercasesTheUsername(): void
     {
-        $this->manager->expects($this->once())
+        $this->manager->expects(self::once())
             ->method('findUserBy')
-            ->with($this->equalTo(['usernameCanonical' => 'jack']));
-        $this->fieldsUpdater->expects($this->once())
+            ->with(self::equalTo(['usernameCanonical' => 'jack']));
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeUsername')
             ->with('JaCk')
-            ->will($this->returnValue('jack'));
+            ->willReturn('jack');
 
         $this->manager->findUserByUsername('JaCk');
     }
 
-    public function testFindUserByEmail()
+    public function testFindUserByEmail(): void
     {
-        $this->manager->expects($this->once())
+        $this->manager->expects(self::once())
             ->method('findUserBy')
-            ->with($this->equalTo(['emailCanonical' => 'jack@email.org']));
-        $this->fieldsUpdater->expects($this->once())
+            ->with(self::equalTo(['emailCanonical' => 'jack@email.org']));
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeEmail')
             ->with('jack@email.org')
-            ->will($this->returnValue('jack@email.org'));
+            ->willReturn('jack@email.org');
 
         $this->manager->findUserByEmail('jack@email.org');
     }
 
-    public function testFindUserByEmailLowercasesTheEmail()
+    public function testFindUserByEmailLowercasesTheEmail(): void
     {
-        $this->manager->expects($this->once())
+        $this->manager->expects(self::once())
             ->method('findUserBy')
-            ->with($this->equalTo(['emailCanonical' => 'jack@email.org']));
-        $this->fieldsUpdater->expects($this->once())
+            ->with(self::equalTo(['emailCanonical' => 'jack@email.org']));
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeEmail')
             ->with('JaCk@EmAiL.oRg')
-            ->will($this->returnValue('jack@email.org'));
+            ->willReturn('jack@email.org');
 
         $this->manager->findUserByEmail('JaCk@EmAiL.oRg');
     }
 
-    public function testFindUserByUsernameOrEmailWithUsername()
+    public function testFindUserByUsernameOrEmailWithUsername(): void
     {
-        $this->manager->expects($this->once())
+        $this->manager->expects(self::once())
             ->method('findUserBy')
-            ->with($this->equalTo(['usernameCanonical' => 'jack']));
-        $this->fieldsUpdater->expects($this->once())
+            ->with(self::equalTo(['usernameCanonical' => 'jack']));
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeUsername')
             ->with('JaCk')
-            ->will($this->returnValue('jack'));
+            ->willReturn('jack');
 
         $this->manager->findUserByUsernameOrEmail('JaCk');
     }
 
-    public function testFindUserByUsernameOrEmailWithEmail()
+    public function testFindUserByUsernameOrEmailWithEmail(): void
     {
-        $this->manager->expects($this->once())
+        $this->manager->expects(self::once())
             ->method('findUserBy')
-            ->with($this->equalTo(['emailCanonical' => 'jack@email.org']))
+            ->with(self::equalTo(['emailCanonical' => 'jack@email.org']))
             ->willReturn($this->getUser());
-        $this->fieldsUpdater->expects($this->once())
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeEmail')
             ->with('JaCk@EmAiL.oRg')
-            ->will($this->returnValue('jack@email.org'));
+            ->willReturn('jack@email.org');
 
         $this->manager->findUserByUsernameOrEmail('JaCk@EmAiL.oRg');
     }
 
-    public function testFindUserByUsernameOrEmailWithUsernameThatLooksLikeEmail()
+    public function testFindUserByUsernameOrEmailWithUsernameThatLooksLikeEmail(): void
     {
         $usernameThatLooksLikeEmail = 'bob@example.com';
         $user = $this->getUser();
 
-        $this->manager->expects($this->at(0))
+        $this->manager->expects(self::at(0))
             ->method('findUserBy')
-            ->with($this->equalTo(['emailCanonical' => $usernameThatLooksLikeEmail]))
-            ->will($this->returnValue(null));
-        $this->fieldsUpdater->expects($this->once())
+            ->with(self::equalTo(['emailCanonical' => $usernameThatLooksLikeEmail]))
+            ->willReturn(null);
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeEmail')
             ->with($usernameThatLooksLikeEmail)
             ->willReturn($usernameThatLooksLikeEmail);
 
-        $this->manager->expects($this->at(1))
+        $this->manager->expects(self::at(1))
             ->method('findUserBy')
-            ->with($this->equalTo(['usernameCanonical' => $usernameThatLooksLikeEmail]))
-            ->will($this->returnValue($user));
-        $this->fieldsUpdater->expects($this->once())
+            ->with(self::equalTo(['usernameCanonical' => $usernameThatLooksLikeEmail]))
+            ->willReturn($user);
+        $this->fieldsUpdater->expects(self::once())
             ->method('canonicalizeUsername')
             ->with($usernameThatLooksLikeEmail)
             ->willReturn($usernameThatLooksLikeEmail);
 
         $actualUser = $this->manager->findUserByUsernameOrEmail($usernameThatLooksLikeEmail);
 
-        $this->assertSame($user, $actualUser);
+        self::assertSame($user, $actualUser);
     }
 
     /**
@@ -172,7 +183,7 @@ class UserManagerTest extends TestCase
      */
     private function getUser()
     {
-        return $this->getMockBuilder('FOS\UserBundle\Model\User')
+        return $this->getMockBuilder(User::class)
             ->getMockForAbstractClass();
     }
 
@@ -181,7 +192,7 @@ class UserManagerTest extends TestCase
      */
     private function getUserManager(array $args)
     {
-        return $this->getMockBuilder('FOS\UserBundle\Model\UserManager')
+        return $this->getMockBuilder(UserManager::class)
             ->setConstructorArgs($args)
             ->getMockForAbstractClass();
     }

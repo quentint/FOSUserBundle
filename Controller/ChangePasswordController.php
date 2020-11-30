@@ -41,10 +41,6 @@ class ChangePasswordController extends AbstractController
 
     /**
      * ChangePasswordController constructor.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param FactoryInterface         $formFactory
-     * @param UserManagerInterface     $userManager
      */
     public function __construct(EventDispatcherInterface $eventDispatcher, FactoryInterface $formFactory, UserManagerInterface $userManager)
     {
@@ -56,8 +52,6 @@ class ChangePasswordController extends AbstractController
     /**
      * Change user password.
      *
-     * @param Request $request
-     *
      * @return Response
      */
     public function changePasswordAction(Request $request)
@@ -68,7 +62,7 @@ class ChangePasswordController extends AbstractController
         }
 
         $event = new GetResponseUserEvent($user, $request);
-        $this->eventDispatcher->dispatch($event,FOSUserEvents::CHANGE_PASSWORD_INITIALIZE);
+        $this->eventDispatcher->dispatch($event, FOSUserEvents::CHANGE_PASSWORD_INITIALIZE);
 
         if (null !== $event->getResponse()) {
             return $event->getResponse();
@@ -81,7 +75,7 @@ class ChangePasswordController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event = new FormEvent($form, $request);
-            $this->eventDispatcher->dispatch($event,FOSUserEvents::CHANGE_PASSWORD_SUCCESS);
+            $this->eventDispatcher->dispatch($event, FOSUserEvents::CHANGE_PASSWORD_SUCCESS);
 
             $this->userManager->updateUser($user);
 
@@ -90,7 +84,7 @@ class ChangePasswordController extends AbstractController
                 $response = new RedirectResponse($url);
             }
 
-            $this->eventDispatcher->dispatch(new FilterUserResponseEvent($user, $request, $response),FOSUserEvents::CHANGE_PASSWORD_COMPLETED);
+            $this->eventDispatcher->dispatch(new FilterUserResponseEvent($user, $request, $response), FOSUserEvents::CHANGE_PASSWORD_COMPLETED);
 
             return $response;
         }

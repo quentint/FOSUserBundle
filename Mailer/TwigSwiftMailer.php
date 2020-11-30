@@ -32,7 +32,7 @@ class TwigSwiftMailer extends AbstractMailer
     {
         $this->twig = $twig;
 
-        parent::__construct($mailer,$router,$parameters);
+        parent::__construct($mailer, $router, $parameters);
     }
 
     /**
@@ -48,7 +48,7 @@ class TwigSwiftMailer extends AbstractMailer
             'confirmationUrl' => $url,
         ];
 
-        $this->sendMessage($this->parameters['from_email']['confirmation'], (string) $user->getEmail(),$template, $context);
+        $this->sendMessage($this->parameters['from_email']['confirmation'], (string) $user->getEmail(), $template, $context);
     }
 
     /**
@@ -64,11 +64,11 @@ class TwigSwiftMailer extends AbstractMailer
             'confirmationUrl' => $url,
         ];
 
-        $this->sendMessage($this->parameters['from_email']['resetting'], (string) $user->getEmail(),$template, $context);
+        $this->sendMessage($this->parameters['from_email']['resetting'], (string) $user->getEmail(), $template, $context);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function sendMessage($fromEmail, $toEmail, $template, $context = [])
     {

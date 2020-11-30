@@ -11,7 +11,7 @@
 
 namespace FOS\UserBundle\Doctrine;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManager as BaseUserManager;
@@ -20,22 +20,10 @@ use FOS\UserBundle\Util\PasswordUpdaterInterface;
 
 class UserManager extends BaseUserManager
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $objectManager;
+    protected ObjectManager $objectManager;
+    private string $class;
 
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * Constructor.
-     *
-     * @param string $class
-     */
-    public function __construct(PasswordUpdaterInterface $passwordUpdater, CanonicalFieldsUpdater $canonicalFieldsUpdater, EntityManagerInterface $om, $class)
+    public function __construct(PasswordUpdaterInterface $passwordUpdater, CanonicalFieldsUpdater $canonicalFieldsUpdater, ObjectManager $om, string $class)
     {
         parent::__construct($passwordUpdater, $canonicalFieldsUpdater);
 
@@ -55,7 +43,7 @@ class UserManager extends BaseUserManager
     /**
      * {@inheritdoc}
      */
-    public function getClass()
+    public function getClass(): string
     {
         if (false !== strpos($this->class, ':')) {
             $metadata = $this->objectManager->getClassMetadata($this->class);
@@ -103,10 +91,7 @@ class UserManager extends BaseUserManager
         }
     }
 
-    /**
-     * @return ObjectRepository
-     */
-    protected function getRepository()
+    protected function getRepository(): ObjectRepository
     {
         return $this->objectManager->getRepository($this->getClass());
     }
